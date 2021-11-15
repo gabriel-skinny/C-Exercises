@@ -46,7 +46,7 @@ int getLineModified(char s[], int lim) {
     return i;   
 }
 
-void copy(char to[], char from[]) {
-    for (int i = 0; from[i] != '\0'; i++) 
-        to[i] = from[i];
+void copy(char *to, char *from) {
+    while (*to++ = *from++)
+        ;
 }
