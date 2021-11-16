@@ -7,16 +7,40 @@ int getLineModified(char [], int);
 
 int main(int argc, char *argv[]) {
   char line[MAXLINE];
-  int found = 0;
+  long lineno = 0;
+  int c, expect = 0, number = 0, found = 0;
 
-  if (argc != 2) {
-    printf("More or less arguments than expected!!");
-  }
+
+  while (--argc > 0 && (*++argv)[0] == '-')
+    while(c = *++argv[0])
+      switch (c){
+      case 'x':
+        expect = 1;
+        break;
+
+      case 'n':
+        number = 1;
+        break;
+
+      default:
+        printf("finded ilgeal arguments");
+        argc = 0;
+        found = -1;
+        break;
+      }
+
+  if (argc != 1) {
+    printf("Usage: find -x -n pattern\n");
+  } 
   else {
     while(getLineModified(line, MAXLINE) > 0) {
+      lineno++;
 
-      if (strstr(line, argv[1]) != NULL) {
-        printf("Found:%s", line);
+      if ((strstr(line, *argv) != NULL) != expect) {
+        if (number)
+          printf("\nLinha:%ld", lineno);
+
+        printf("\nFound:%s", line);
         found++;
       }
     }
