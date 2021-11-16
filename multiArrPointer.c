@@ -16,19 +16,24 @@ int main() {
   return 0;
 }
 
-static char daytab[2][13] = {
-  {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-  {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-};
+static char month1[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static char month2[] = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+
+static char *daytab[] = {month1, month2};
+
+
 
 int day_of_year(int year, int month, int day) {
-  int i, leap;
+  int leap;
 
   leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
 
+  char *initialPoint = daytab[leap];
+
   if (month <= 13 && month >= 0) {
-    for (i = 1; month <= 13 && i < month; i++)
-      day+= daytab[leap][i];
+    while((++daytab[leap] - initialPoint) < month)
+      day+= *(daytab[leap]);
 
     return day;
   }
@@ -37,16 +42,17 @@ int day_of_year(int year, int month, int day) {
 }
 
 void month_day(int year, int yearday, int *pmoth, int *pday) {
-  int i, leap;
+  int leap;
 
   leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
 
+  char *initialPoint = daytab[leap];
 
-  for (i = 1; yearday >= 0 && yearday > daytab[leap][i]; i++)     
-      yearday-= daytab[leap][i];
+  while(yearday >= 0 && yearday > *(++daytab[leap]))    
+      yearday-= *(daytab[leap]);
   
-  if (i <= 12 && yearday >= 0){
-    *pmoth = i;
+  if (daytab[leap] - initialPoint <= 12 && yearday >= 0){
+    *pmoth = daytab[leap] - initialPoint - 1;
     *pday = yearday;
   }
   else {
