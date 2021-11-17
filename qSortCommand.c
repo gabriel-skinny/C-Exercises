@@ -7,7 +7,7 @@
 char *lineptr[MAXLINES];
 char arrMax[MAXLINES];
 
-int readlines(char *[], int, char *);
+int readlines(char *[], int, char *, int);
 void writelines(char *[], int, int);
 
 void qsortM(void *[], int, int, int (*)(void *, void *));
@@ -16,7 +16,7 @@ int numcmp(char *, char *);
 
 int main(int argc, char *argv[]) {
   int nlines, c;
-  int numeric = 0, reverse = 0;    
+  int numeric = 0, reverse = 0, ignoreCapital = 0;    
 
   while(--argc > 0 && (*++argv)[0] == '-')
     while(c = *++argv[0])
@@ -27,14 +27,16 @@ int main(int argc, char *argv[]) {
         case 'r':
           reverse = 1;
           break;
-        
+        case 'f':
+          ignoreCapital = 1;
+          break;
         default:
           printf("Argumment unknow");
           break;
       }
 
 
-  if ((nlines = readlines(lineptr, MAXLINES, arrMax)) >= 0) {
+  if ((nlines = readlines(lineptr, MAXLINES, arrMax, ignoreCapital)) >= 0) {
     qsortM(lineptr, 0, nlines - 1, 
       (int (*)(void*, void*))(numeric ? numcmp : strcmp));
 
@@ -50,9 +52,9 @@ int main(int argc, char *argv[]) {
 
 #define MAXCHAR 200
 
-int getLineM (char *, int);
+int getLineM (char *, int, int);
 
-int readlines(char *lineptr[], int maxlines, char arrMax[]) {
+int readlines(char *lineptr[], int maxlines, char arrMax[], int ignoreCapital) {
   int len, nlines;
   char *p, line[MAXCHAR], *lineStop;
   p = arrMax;
@@ -60,7 +62,7 @@ int readlines(char *lineptr[], int maxlines, char arrMax[]) {
 
   nlines = 0;
 
-  while((len = getLineM(line, MAXCHAR)) > 0)
+  while((len = getLineM(line, MAXCHAR, ignoreCapital)) > 0)
     if ((nlines >= maxlines) || (p + len  > lineStop))
       return -1;
     
@@ -130,10 +132,13 @@ void swap(void *v[], int i, int j) {
 
 }
 
-int getLineM(char s[], int lim) {
+int getLineM(char s[], int lim, int ignoreCapital) {
     int c, i;
 
     for (i = 0; i < lim - 1 && ((c = getchar()) != EOF) && c != '\n' && c!='p'; i++)
+        if (ignoreCapital && c >= 'A' && c <= 'Z')
+          s[i] = 'a' - 'A' + c;
+        else  
         s[i] = c;
     
     if (c == '\n') {
