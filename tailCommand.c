@@ -62,19 +62,20 @@ void writelines(char *lines[], int linesToRead, int nlines){
 
 
 int getLineModified(char s[], int lim) {
-    int c, i;
+    int c;
+    char *incialPos = s;
 
-    for (i = 0; i < lim - 1 && ((c = getchar()) != EOF) && c != '\n' && c != '['; i++)
-        s[i] = c;
+    while ((c = getchar()) != EOF && c != '\n' && c != '[' && s <= incialPos + lim - 1)
+        *s++ = c;
     
     if (c == '\n') {
-        s[i] = c;
-        i++;
+        *s = c;
+        s++;
     }
 
-    s[i] = '\0';
+    *s = '\0';
 
-    return i;   
+    return s - incialPos;   
 }
 
 #define MAX_SIZE 200
