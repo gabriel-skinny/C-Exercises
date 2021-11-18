@@ -25,6 +25,7 @@ int main() {
       root = addTree(root, word);
     }
   
+  treeprint(root);
 
   return 0;
 }
@@ -59,10 +60,11 @@ struct tnode *addTree(struct tnode *p, char *w) {
 }
 
 void treeprint(struct tnode *p) {
-  if (p != NULL)
+  if (p != NULL){
     treeprint(p -> left);
-    printf("Word: %s Count: %c\n", p -> word, p -> count);
+    printf("Word: %s Count: %d\n", p -> word, p -> count);
     treeprint(p -> rigth);
+  }
 }
 
 #include <stdlib.h>
