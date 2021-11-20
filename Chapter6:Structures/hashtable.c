@@ -12,6 +12,7 @@ struct nlist {
 
 struct nlist *install(char *, char *);
 struct nlist *lookup(char *);
+void undef (char *);
 
 
 
@@ -27,6 +28,13 @@ int main() {
 
   printf("\n\nFound the value of this variable name: %s", "PROFESSORES");
   printf("\nValue: %s\n\n", lookup("PROFESSORES") -> value);
+
+  undef("PROFESSORES");
+
+  printf("\nPrint deleted variable value: %p\n", lookup("PROFESSORES"));
+
+  printf("\n\nFound the value of this variable name: %s", nameVariables[0]);
+  printf("\nValue: %s\n\n", lookup(nameVariables[0]) -> value);
 
   return 0;
 }
@@ -64,6 +72,20 @@ struct nlist *install(char *name, char *value) {
     return NULL;
 
   return list;
+}
+
+void undef (char *name) {
+  struct nlist *list;
+  unsigned hashValue;
+
+  if ((list = lookup(name)) != NULL) {
+    hashValue = hash(name);
+    hastab[hashValue] = list -> next;
+    free((void *)  list);
+  }
+  else  
+    printf("VARIABLE NOT FOUND");
+
 }
 
 unsigned hash(char *name) {
