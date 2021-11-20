@@ -80,12 +80,17 @@ void undef (char *name) {
 
   if ((list = lookup(name)) != NULL) {
     hashValue = hash(name);
-    hastab[hashValue] = list -> next;
-    free((void *)  list);
+    
+    if (list -> next != NULL) {
+      list -> next = list -> next -> next;
+      list = list -> next;
+    } else {
+      hastab[hashValue] = NULL;
+      free ((void *) list);
+    }
   }
-  else  
-    printf("VARIABLE NOT FOUND");
-
+  else
+    printf("Variable not found");
 }
 
 unsigned hash(char *name) {
