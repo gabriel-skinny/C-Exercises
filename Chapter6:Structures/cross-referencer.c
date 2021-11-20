@@ -28,7 +28,6 @@ int main() {
 
   while (getword(word, MAXSIZE) != EOF){
     lineNumber++;
-
     if (isalpha(word[0]))
       lineRoot = addLine(lineRoot, word, lineNumber);
   }
