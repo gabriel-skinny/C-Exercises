@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define HASHIZE 100
+#define MAXWORD 100
 
 struct nlist {
   struct nlist *next;
@@ -13,28 +15,21 @@ struct nlist {
 struct nlist *install(char *, char *);
 struct nlist *lookup(char *);
 void undef (char *);
-
+int getVar(char *, char *, int);
 
 
 int main() {
 
-  char *nameVariables[] = {"ALUNOS", "PROFESSORES", "MANES"};
-  char *values[] = {"15", "45", "31"};
+  char name[MAXWORD];
+  char value[MAXWORD];
 
-  for (int i = 0; i < 3; i++) {
-    install(nameVariables[i], values[i]);
-  }
-
-
-  printf("\n\nFound the value of this variable name: %s", "PROFESSORES");
-  printf("\nValue: %s\n\n", lookup("PROFESSORES") -> value);
-
-  undef("PROFESSORES");
-
-  printf("\nPrint deleted variable value: %p\n", lookup("PROFESSORES"));
-
-  printf("\n\nFound the value of this variable name: %s", nameVariables[0]);
-  printf("\nValue: %s\n\n", lookup(nameVariables[0]) -> value);
+  while(getVar(name, value, MAXWORD) != EOF)
+    if (isalpha(name[0]))
+      install(name, value);
+      
+  
+    
+  printf("\n\nConstant criated: %s, their value: %s", name, lookup(name) -> value);
 
   return 0;
 }
@@ -80,7 +75,7 @@ void undef (char *name) {
 
   if ((list = lookup(name)) != NULL) {
     hashValue = hash(name);
-    
+
     if (list -> next != NULL) {
       list -> next = list -> next -> next;
       list = list -> next;
@@ -100,4 +95,57 @@ unsigned hash(char *name) {
     hashNumber = *name + 36 * hashNumber;
 
   return hashNumber % HASHIZE;
+}
+
+int getVar(char * name, char *value, int limit) {
+  int c, getchM(void);
+	void ungetchM(int);
+	char *nameP = name;
+  char *valueP = value;
+  
+  while (isspace(c = getchM()))
+    ;
+
+  if (c = '#')
+    while ((c = getchM()) != ' ')
+      ;
+
+  if ((c = getchM()) != EOF)
+    *nameP++ = c;
+  
+  if (!isalpha(c)) {
+    *nameP = '\0';
+    return c;
+  }
+
+  for (; --limit > 0; nameP++) 
+    if (!isalnum(*nameP = getchM())) {
+      ungetchM(*nameP);
+      break;
+    }
+    else if (*nameP == ' '){
+      *nameP = '\0';
+      break;
+    }
+
+  while ((*valueP++ = getchM()) != '\n')
+    ;
+
+  *valueP = '\0';
+
+  return name[0];
+}
+
+char buffer[MAXWORD];
+int countp;
+
+int getchM(void) {
+  return (countp > MAXWORD) ? buffer[--countp] : getchar();
+}
+
+void ungetchM(int c) {
+  if (countp < MAXWORD)
+    buffer[++countp] = c;
+  else  
+    printf("To much characters");
 }
