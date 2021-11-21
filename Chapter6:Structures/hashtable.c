@@ -6,14 +6,16 @@
 #define HASHIZE 100
 #define MAXWORD 100
 
+typedef struct nlist *listPointer;
+
 struct nlist {
   struct nlist *next;
   char *name;
   char *value;
 } static *hastab[HASHIZE];
 
-struct nlist *install(char *, char *);
-struct nlist *lookup(char *);
+listPointer install(char *, char *);
+listPointer lookup(char *);
 void undef (char *);
 int getVar(char *, char *, int);
 
@@ -36,8 +38,8 @@ int main() {
 
 unsigned hash(char *);
 
-struct nlist *lookup(char *name) {
-  struct nlist *list;
+listPointer lookup(char *name) {
+  listPointer list;
 
   for (list = hastab[hash(name)]; list != NULL; list = list -> next)
     if (strcmp(list -> name, name) == 0)
@@ -46,8 +48,8 @@ struct nlist *lookup(char *name) {
   return NULL;
 }
 
-struct nlist *install(char *name, char *value) {
-  struct nlist *list;
+listPointer install(char *name, char *value) {
+  listPointer list;
   unsigned hashVal;
 
   if ((list = lookup(name)) == NULL) {
