@@ -49,8 +49,7 @@ int main() {
       
       
   printf("\n\nThree: \n\n");
-  /* printTreeGroup(rootGroup, rootWord); */
-  printWord(rootWord);
+  printTreeGroup(rootGroup, rootWord);
   printf("\n\nFinished!!!!!!!!\n\n");
   
   return 0;
@@ -118,10 +117,9 @@ char *copyFirstSixLetters(char *word) {
 }
 
 void printTreeGroup(struct group *group, struct word *p) {
-
     if (group != NULL)
       printTreeGroup(group -> left, p);
-      printWord(p);
+      printWord(group -> word);
       printTreeGroup(group -> rigth, p);
 }
 
