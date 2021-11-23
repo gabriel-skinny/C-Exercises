@@ -106,12 +106,13 @@ struct group *addGroup(struct group *pGroup, char *word) {
 
 char *copyFirstSixLetters(char *word) {
   char *newWord;
-  newWord = strdup(word);
-
-  if (strlen(newWord) < 6)
-    return newWord;
+  int length = 6;
+  newWord = (char *) malloc(length);
+	
+  while (length-- > 0)
+	*newWord++ = *word++;
   
-  newWord[5] = '\0';
+  *newWord = '\0';
 
   return newWord;
 }
