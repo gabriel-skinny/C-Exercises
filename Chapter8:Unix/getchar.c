@@ -1,7 +1,6 @@
 #include "syscall.h"
 #include <stdio.h>
-
-#define BUFFSIZE 1
+#include <fcntl.h>
 
 int getcharM(void);
 
@@ -17,7 +16,7 @@ int main() {
 }
 
 int getcharM(void) {
-  static char buf[BUFFSIZE];
+  static char buf[BUFSIZ];
   static char *bufp = buf;
   static int n;
 
