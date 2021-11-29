@@ -17,7 +17,7 @@ void *mallocM(unsigned nbytes);
 
 int main() {
   char teste[] = "Teste";
-  char *pTeste = mallocM(strlen(teste) + 1); 
+  char *pTeste = mallocM(strlen(teste) + 6); 
 
   strcpy(teste, pTeste);
 
